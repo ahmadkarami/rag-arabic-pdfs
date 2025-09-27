@@ -7,7 +7,6 @@ ENV PIP_NO_CACHE_DIR=1 \
 
 WORKDIR /opt/app
 
-# Copy requirements
 COPY ./src/requirements.txt ./
 
 # Install Python dependencies

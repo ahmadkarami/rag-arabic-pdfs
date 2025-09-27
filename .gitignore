@@ -1,5 +1,7 @@
 v-env/
 .env
 src/public/DB
+src/public/.DS_Store
 src/public/downloads
 src/public/knowledgeBase
+*__pycache__
