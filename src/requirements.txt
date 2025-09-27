@@ -1,0 +1,11 @@
+fastapi
+boto3
+pdf2image
+langchain==0.3.27
+pydantic
+openai
+uvicorn
+python-dotenv
+langchain_community
+sentence_transformers
+chromadb

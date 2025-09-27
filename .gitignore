@@ -1,0 +1,5 @@
+v-env/
+.env
+src/public/DB
+src/public/downloads
+src/public/knowledgeBase
