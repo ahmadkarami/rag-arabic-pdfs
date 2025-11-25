@@ -4,14 +4,19 @@ ENV PIP_NO_CACHE_DIR=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/opt/venv/bin:$PATH"
+    # ENV PATH="/opt/venv/bin:$PATH" as if u activate venv environment
+    # Global/system python → /usr/local/bin/python
+	# sVenv python → /opt/venv/bin/python
 
 WORKDIR /opt/app
+# Any COPY, RUN, or CMD commands will run relative to this directory.
 
 COPY ./src/requirements.txt ./
 
-# Install Python dependencies
+# Install Python dependencies, Keeps dependencies isolated from the system Python in /usr/local/bin.
 RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install --no-cache-dir --no-compile -r requirements.txt
+# Install dependencies inside the venv
 
 FROM python:3.11-slim AS rag_server
 

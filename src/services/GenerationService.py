@@ -4,6 +4,7 @@ from pathlib import Path
 import boto3
 import base64
 from dotenv import load_dotenv
+from fastapi import HTTPException
 from openai import OpenAI
 from datetime import datetime
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -45,7 +46,11 @@ class GenerationService:
             
         
         refine_input_token, refine_output_token, refine_total_token, refined=self.refine_query(question, history, chatSummary)
-        refined = json.loads(refined)
+        try:
+            refined = json.loads(refined)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
+        
         gen_input_token, gen_output_token, gen_total_token, answer = self.generate_from_llm(refined.get("refinedQuery"), fileUrl, history, chatSummary)
         
         return gen_input_token + ext_input_token + refine_input_token, gen_output_token + ext_output_token + refine_output_token, gen_total_token + ext_total_token + refine_total_token, answer, refined.get("chatSummary")

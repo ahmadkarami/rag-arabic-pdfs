@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from services.GenerationService import GenerationService
 from pydantic import BaseModel
 from datetime import datetime
@@ -26,15 +26,21 @@ class QuestionRequest(BaseModel):
 
 gen_service = GenerationService()
 
+
 @app.post("/generate-answer", summary="Generate answer", description="Returns a message for users' question.")
 def generate_answer(payload: QuestionRequest):
     print("---------------->>>>>>> time:", datetime.now())
     print('Start sending request')
-    input_token, output_token, total_token, answer, chatSummary= gen_service.generate_answer(payload.question, payload.fileUrl, payload.history, payload.chatSummary)
-    return { 
+    try:
+        input_token, output_token, total_token, answer, chatSummary = gen_service.generate_answer(
+            payload.question, payload.fileUrl, payload.history, payload.chatSummary
+        )
+        return {
             "answer": answer,
             "inputToken": input_token,
             "outputToken": output_token,
             "totalToken": total_token,
             "chatSummary": chatSummary
         }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
